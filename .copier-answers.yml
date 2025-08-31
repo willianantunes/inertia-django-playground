@@ -1,0 +1,11 @@
+# Changes here will be overwritten by Copier
+_commit: v0.16.0
+_src_path: gh:sarthakjariwala/django-vite-inertia
+database: sqlite
+docker_dev: false
+docker_prod: false
+frontend: react
+project_name: inertia-django-playground
+starter_kit: true
+tailwind_css: true
+

@@ -1,0 +1,27 @@
+# https://docs.docker.com/compose/compose-file/compose-file-v3/#extension-fields
+x-build: &dockerfile-dev-build
+  context: .
+  dockerfile: Dockerfile.dev
+
+services:
+  remote-interpreter:
+    build: *dockerfile-dev-build
+    env_file: .env
+    volumes:
+      - .:/app
+    ports:
+      - "${DJANGO_BIND_PORT}:${DJANGO_BIND_PORT}"
+      - "5173:5173" # Vite debug port
+    command:
+      [
+        "./scripts/start-development.sh",
+      ]
+    healthcheck:
+      test: [ "CMD-SHELL", "python manage.py health_check -s readiness --skip-checks" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  default: # "default" name is important because it's automatically used by all services. Check out: https://stackoverflow.com/a/78030885
+    name: shared-compose-network
