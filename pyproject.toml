@@ -8,6 +8,9 @@ inertia-django = "*"
 whitenoise = "*"
 gunicorn = "*"
 django-vite = "*"
+faker = "*"
+
+[tool.poetry.group.dev.dependencies]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

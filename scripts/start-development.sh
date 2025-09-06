@@ -7,6 +7,6 @@ set -e
 
 python manage.py makemigrations
 python manage.py migrate
-python manage.py seed --create-super-user
+python manage.py seed --create-super-user --entries-per-user 15
 
 python manage.py runserver 0.0.0.0:${DJANGO_BIND_PORT:-8080}

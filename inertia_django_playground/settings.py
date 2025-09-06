@@ -81,19 +81,6 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
-        "OPTIONS": {
-            "transaction_mode": "IMMEDIATE",
-            "timeout": 5,  # seconds
-            "init_command": """
-                    PRAGMA foreign_keys = ON;
-                    PRAGMA journal_mode = WAL;
-                    PRAGMA synchronous = NORMAL;
-                    PRAGMA temp_store = MEMORY;
-                    PRAGMA mmap_size = 134217728;
-                    PRAGMA journal_size_limit = 67108864;
-                    PRAGMA cache_size = 2000;
-                """,
-        },
     }
 }
 
@@ -140,7 +127,7 @@ STATIC_ROOT = BASE_DIR / "static"
 DJANGO_VITE = {
     "default": {
         "dev_mode": DEBUG,
-        "dev_server_host": os.getenv("DJANGO_VITE_DEV_SERVER_HOST", "0.0.0.0"),
+        "dev_server_host": os.getenv("DJANGO_VITE_DEV_SERVER_HOST", "localhost"),
         "dev_server_port": int(os.getenv("DJANGO_VITE_DEV_SERVER_PORT", 5173)),
     }
 }
@@ -159,6 +146,9 @@ INERTIA_JSON_ENCODER = inertia_settings.INERTIA_JSON_ENCODER
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "core.User"
+LOGIN_URL = "/auth/login/"
 
 
 # http://whitenoise.evans.io/en/stable/django.html#WHITENOISE_IMMUTABLE_FILE_TEST

@@ -1,5 +1,7 @@
 import os
 
+from itertools import islice
+
 from django.contrib import admin
 from django.core.paginator import Paginator
 from django.db import OperationalError
@@ -21,6 +23,8 @@ class TimeLimitedPaginator(Paginator):
 
     @cached_property
     def count(self):
+        if connection.vendor != "postgresql":
+            return super().count
         # We set the timeout in a db transaction to prevent it from affecting other transactions.
         with transaction.atomic(), connection.cursor() as cursor:
             cursor.execute("SET LOCAL statement_timeout TO 200;")
@@ -53,6 +57,34 @@ class CustomModelAdminMixin(admin.ModelAdmin):
             if raw_id_fields:
                 self.raw_id_fields = raw_id_fields
         super(CustomModelAdminMixin, self).__init__(model, admin_site)
+
+
+def chunker(iterable, size):
+    """
+    See more details at: `https://stackoverflow.com/a/54431431/3899136`
+    """
+
+    def chunker_generator(generator, size):
+        iterator = iter(generator)
+        for first in iterator:
+
+            def chunk():
+                yield first
+                for more in islice(iterator, size - 1):
+                    yield more
+
+            yield [k for k in chunk()]
+
+    if not hasattr(iterable, "__len__"):
+        # Generators don't have len, so fall back to slower method that works with generators
+        for chunk in chunker_generator(iterable, size):
+            yield chunk
+        return
+
+    it = iter(iterable)
+
+    for i in range(0, len(iterable), size):
+        yield [k for k in islice(it, size)]
 
 
 def strtobool(value: str) -> bool:
