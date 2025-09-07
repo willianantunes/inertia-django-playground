@@ -6,6 +6,7 @@ export default function Login() {
       <h1 className='text-2xl font-semibold mb-6 text-center'>Sign in</h1>
       <Form action='/auth/login/' method='post' className='space-y-4'>
         {({ processing, errors }) => {
+          console.log(`############`)
           console.log(errors)
           console.log(processing)
           return (

@@ -590,6 +590,7 @@ Unlike traditional XHR/fetch requests where you might check for a `422` status c
 
 - Only function-based views are allowed, given `inertia-django` does not support class-based views.
 - Use Django's built-in authentication system for user management.
+- Do not create migrations.
 
 ### Forms
 

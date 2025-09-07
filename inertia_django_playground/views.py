@@ -13,10 +13,14 @@ from django.shortcuts import redirect
 from django.views.decorators.http import require_GET
 from django.views.decorators.http import require_http_methods
 from inertia import render
+from inertia import share
 
+from inertia_django_playground.apps.core.models import CreditCard
 from inertia_django_playground.apps.core.models import Todo
+from inertia_django_playground.forms import CreditCardForm
 from inertia_django_playground.forms import EmailAuthenticationForm
 from inertia_django_playground.forms import TodoForm
+from inertia_django_playground.support.inertia_workarounds import get_cleaned_data_or_redirect_with_errors
 
 
 @require_GET
@@ -44,8 +48,8 @@ def login_view(request):
         user = authenticate(email=email, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, "Welcome back!")
             return redirect("todos:index")
+        # TODO ADD MESSAGE WHEN NO USER IS FOUND
     return render(request, "Auth/Login", props={"errors": form.errors})
 
 
@@ -87,12 +91,8 @@ def todos_index(request):
 @require_http_methods(["POST"])
 def todos_create(request):
     form = TodoForm(json.loads(request.body) | {"user": request.user.id})
-    if not form.is_valid():
-        messages.error(request, "Title is required")
-        return redirect("todos:index")
+    get_cleaned_data_or_redirect_with_errors(form, redirect("todos:index"))
     form.save()
-    # Todo.objects.create(user=request.user, title=title)
-    messages.success(request, "Todo created")
     return redirect("todos:index")
 
 
@@ -177,3 +177,71 @@ def todos_upload_csv(request):
     else:
         messages.info(request, "No todos were imported from the CSV file.")
     return redirect("todos:index")
+
+
+@login_required
+@require_GET
+def credit_cards_index(request):
+    cards = (
+        CreditCard.objects.filter(user=request.user)
+        .values(
+            "id",
+            "number",
+            "issuer",
+            "valid_from",
+            "valid_to",
+            "security_code",
+            "created_at",
+            "updated_at",
+        )
+        .order_by("-created_at")
+    )
+    paginator = Paginator(cards, 10)
+    page_number = request.GET.get("page", 1)
+    page_cards = paginator.get_page(page_number)
+    page_cards_as_json = {
+        "has_previous": page_cards.has_previous(),
+        "has_next": page_cards.has_next(),
+        "number": page_cards.number,
+        "num_pages": page_cards.paginator.num_pages,
+        "results": list(page_cards.object_list),
+    }
+    return render(
+        request,
+        "CreditCards/Index",
+        {
+            "user": {"name": request.user.email},
+            "page_cards": page_cards_as_json,
+        },
+    )
+
+
+@login_required
+@require_http_methods(["POST"])
+def credit_cards_create(request):
+    data = json.loads(request.body)
+    form = CreditCardForm(data | {"user": request.user.id})
+    get_cleaned_data_or_redirect_with_errors(form, redirect("credit_cards:index"))
+    form.save()
+    return redirect("credit_cards:index")
+
+
+@login_required
+@require_http_methods(["POST"])
+def credit_cards_delete(request, card_id: int):
+    card = get_object_or_404(CreditCard, id=card_id, user=request.user)
+    card.delete()
+    messages.success(request, "Credit card deleted")
+    return redirect("credit_cards:index")
+
+
+@login_required
+@require_http_methods(["POST"])
+def credit_cards_update(request, card_id: int):
+    card = get_object_or_404(CreditCard, id=card_id, user=request.user)
+    data = json.loads(request.body)
+    form = CreditCardForm(data | {"user": request.user.id}, instance=card)
+    if not form.is_valid():
+        return redirect("credit_cards:index", props={"errors": form.errors})
+    form.save()
+    return redirect("credit_cards:index")

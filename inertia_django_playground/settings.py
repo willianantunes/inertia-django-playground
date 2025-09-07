@@ -50,7 +50,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "inertia.middleware.InertiaMiddleware",
-    "inertia_django_playground.middleware.DataShareMiddleware",
+    "inertia_django_playground.support.inertia_workarounds.DataShareMiddleware",
 ]
 
 ROOT_URLCONF = "inertia_django_playground.urls"

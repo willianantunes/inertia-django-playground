@@ -1,6 +1,6 @@
-import { Form, Link } from '@inertiajs/react'
+import { Form, Link, usePage } from '@inertiajs/react'
 
-export default function TodosIndex({ user, page_todos }) {
+export default function TodosIndex({ user, page_todos, errors }) {
   const results = page_todos?.results ?? []
   const numPages = page_todos?.num_pages ?? 1
   const current = page_todos?.number ?? 1
@@ -20,26 +20,47 @@ export default function TodosIndex({ user, page_todos }) {
     <div className='w-full max-w-3xl'>
       <div className='flex items-center justify-between mb-6'>
         <h1 className='text-2xl font-semibold'>Hi, {user?.name}</h1>
-        <Link href='/auth/logout/' method='post' as='button' className='text-sm text-red-600'>
-          Logout
-        </Link>
+        <div className='flex items-center gap-4'>
+          <Link href='/cards/' className='text-blue-600'>
+            Credit cards
+          </Link>
+          <Link href='/auth/logout/' method='post' as='button' className='text-sm text-red-600'>
+            Logout
+          </Link>
+        </div>
       </div>
 
       <div className='mb-6 space-y-4'>
-        <Form action='/todos/create/' method='post' resetOnSuccess className='flex gap-2'>
+        <Form action='/todos/create/' method='post' resetOnSuccess className='flex flex-col gap-2'>
           {({ processing }) => (
             <>
-              <input name='title' placeholder='New todo title' className='flex-1 border rounded px-3 py-2' />
-              <button
-                type='submit'
-                disabled={processing}
-                className='bg-green-600 text-white rounded px-4 py-2 disabled:opacity-50'
-              >
-                Add
-              </button>
+              <div className='flex gap-2 items-start'>
+                <input
+                  name='title'
+                  placeholder='New todo title'
+                  className={`flex-1 border rounded px-3 py-2 ${errors?.title ? 'border-red-500' : ''}`}
+                  aria-invalid={errors?.title ? 'true' : undefined}
+                />
+                <button
+                  type='submit'
+                  disabled={processing}
+                  className='bg-green-600 text-white rounded px-4 py-2 disabled:opacity-50'
+                >
+                  Add
+                </button>
+              </div>
+              {errors?.title && (
+                <div className='text-red-600 text-sm'>{String(errors.title)}</div>
+              )}
             </>
           )}
         </Form>
+
+        {errors?.__all__ && (
+          <div className='text-red-600 text-sm'>
+            {Array.isArray(errors.__all__) ? errors.__all__.map((e, i) => <div key={i}>{String(e)}</div>) : <div>{String(errors.__all__)}</div>}
+          </div>
+        )}
 
         <Form action='/todos/upload-csv/' method='post' resetOnSuccess className='flex items-center gap-2'>
           {({ processing }) => (

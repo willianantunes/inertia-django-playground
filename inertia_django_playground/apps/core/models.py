@@ -69,3 +69,21 @@ class Todo(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class CreditCard(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="credit_cards")
+    number = models.CharField(max_length=19)
+    issuer = models.CharField(max_length=100)
+    valid_from = models.DateField()
+    valid_to = models.DateField()
+    security_code = models.CharField(max_length=4)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        last4 = self.number[-4:] if self.number else "????"
+        return f"{self.issuer} **** {last4} (valid {self.valid_from} to {self.valid_to})"
