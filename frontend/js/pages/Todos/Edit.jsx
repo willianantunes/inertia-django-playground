@@ -1,53 +1,36 @@
 import { Form, Link } from '@inertiajs/react'
+import { Box, Button, Checkbox, FormControlLabel, Stack, TextField, Typography } from '@mui/material'
 
 export default function TodosEdit({ todo }) {
   return (
-    <div className='w-full max-w-lg'>
-      <div className='mb-4'>
-        <Link href='/todos/' className='text-blue-600'>
+    <Box sx={{ width: '100%', maxWidth: 640, mx: 'auto' }}>
+      <Box sx={{ mb: 2 }}>
+        <Button component={Link} href='/todos/' size='small'>
           ← Back
-        </Link>
-      </div>
-      <h1 className='text-2xl font-semibold mb-6'>Edit Todo #{todo.id}</h1>
-      <Form action={`/todos/${todo.id}/edit/`} method='post' setDefaultsOnSuccess className='space-y-4'>
+        </Button>
+      </Box>
+      <Typography variant='h5' fontWeight={600} sx={{ mb: 3 }}>
+        Edit Todo #{todo.id}
+      </Typography>
+      <Form action={`/todos/${todo.id}/edit/`} method='post' setDefaultsOnSuccess>
         {({ processing }) => (
-          <>
-            <div>
-              <label htmlFor='title' className='block text-sm font-medium'>
-                Title
-              </label>
-              <input
-                id='title'
-                name='title'
-                defaultValue={todo.title}
-                className='mt-1 block w-full border rounded px-3 py-2'
-              />
-            </div>
-            <div className='flex items-center gap-2'>
-              <input
-                id='completed'
-                name='completed'
-                type='checkbox'
-                defaultChecked={todo.completed}
-                className='h-4 w-4'
-              />
-              <label htmlFor='completed'>Completed</label>
-            </div>
-            <div className='flex items-center gap-2'>
-              <button
-                type='submit'
-                disabled={processing}
-                className='bg-blue-600 text-white rounded px-4 py-2 disabled:opacity-50'
-              >
+          <Stack spacing={2}>
+            <TextField id='title' name='title' defaultValue={todo.title} label='Title' fullWidth />
+            <FormControlLabel
+              control={<Checkbox id='completed' name='completed' defaultChecked={todo.completed} />}
+              label='Completed'
+            />
+            <Stack direction='row' spacing={2}>
+              <Button type='submit' disabled={processing} variant='contained'>
                 Save
-              </button>
-              <Link href={`/todos/${todo.id}/delete/`} method='post' as='button' className='text-red-600'>
+              </Button>
+              <Button component={Link} href={`/todos/${todo.id}/delete/`} method='post' color='error'>
                 Delete
-              </Link>
-            </div>
-          </>
+              </Button>
+            </Stack>
+          </Stack>
         )}
       </Form>
-    </div>
+    </Box>
   )
 }

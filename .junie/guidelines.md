@@ -3,7 +3,11 @@
 Tech stack you should focus on when executing tasks:
 
 - Backend: Django.
-- Frontend: React, inertiajs, and tailwindcss.
+- Frontend:
+  - Frameworks: React, inertiajs
+  - Styling / UI: Material-UI (MUI)
+  - Icons: Lucide
+  - Animation: Motion
 
 ## Usage of `'@inertiajs/react'`
 
@@ -605,28 +609,95 @@ Usage:
 
 #### Scenarios
 
+##### When the Django form extends `forms.Form`
+
 If your inertiajs form has a contact form with `name` and `message` fields, you can create a Django form like this:
 
 ```python
 from django import forms
 
 class ContactForm(forms.Form):
-    name = forms.CharField(max_length=100)
-    message = forms.CharField(widget=forms.Textarea)
+    email = forms.EmailField(max_length=254)
+    message = forms.CharField(max_length=36, required=True)
 ```
 
-Then in your Django view, you can handle the form submission like this:
+Then, in your Django view, you can handle the form submission like this:
 
 ```python
+from django.contrib import messages
+# Other imports...
+
 @require_http_methods(["POST"])
 def contact_view(request):
     form = ContactForm(json.loads(request.body))
-    if form.is_valid():
-        # Put the code to process the data in form.cleaned_data
-        return HttpResponseRedirect('/success/')
-    return render(request, 'page', {'form': form.errors})
+    continue_or_redirect_with_errors(form, redirect("contact:index"))
+    # Put the code to process the data in form.cleaned_data
+    return redirect("contact:index")
+```
+
+`continue_or_redirect_with_errors` is only used because the request path that accepts a POST in `contact_view` is not the same as the path that shows the form. If they were the same, you could just render the form with errors. Like this:
+
+```python
+from inertia import render
+# Other imports...
+
+@require_http_methods(["GET", "POST"])
+def contact_view(request):
+    form = ContactForm(json.loads(request.body))
+    if not form.is_valid():
+        return render(request, "Contact/Index", {"errors": form.errors})
+    # Put the code to process the data in form.cleaned_data
+    return render(request, "Contact/Index")
+```
+
+If the `ContactForm` has errors for `email` and `message`, the frontend may receive a dictionary containing the key `errors` with the following value:
+
+```json
+{
+  "email": [
+    "Enter a valid email address."
+  ],
+  "message": [
+    "Ensure this value has at most 36 characters (it has 85)."
+  ]
+}
+```
+
+If the `ContactForm` has errors unrelated to specific fields, the key `errors` might look like this:
+
+```json
+{
+  "__all__": [
+    "Are you a spammer? Because I think you are."
+  ]
+}
+```
+
+##### When the Django form extends `forms.ModelForm`
+
+Let's say you have a form like the following:
+
+```
+class TodoForm(forms.ModelForm):
+    class Meta:
+        model = Todo
+        fields = "__all__"
+```
+
+Then, in your Django view, you can handle the form submission like this:
+
+```python
+from django.contrib import messages
+# Other imports...
+
+@require_http_methods(["POST"])
+def contact_view(request):
+    form = TodoForm(json.loads(request.body) | {"user": request.user.id})
+    continue_or_redirect_with_errors(form, redirect("todos:index"))
+    form.save()
+    return redirect("todos:index")
 ```
 
 ## Testing information
 
-DO NOT WRITE TESTS.
+Do not write or run tests.

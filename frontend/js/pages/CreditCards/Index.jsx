@@ -1,4 +1,19 @@
 import { Form, Link } from '@inertiajs/react'
+import {
+  Box,
+  Button,
+  Grid,
+  Stack,
+  TextField,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from '@mui/material'
 
 export default function CreditCardsIndex({ user, page_cards, errors }) {
   const results = page_cards?.results ?? []
@@ -15,152 +30,270 @@ export default function CreditCardsIndex({ user, page_cards, errors }) {
   const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i)
 
   return (
-    <div className="w-full max-w-5xl">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold">Credit cards - {user?.name}</h1>
-        <div className="flex gap-4 items-center">
-          <Link href="/todos/" className="text-blue-600">Todos</Link>
-          <Link href='/auth/logout/' method='post' as='button' className='text-sm text-red-600'>Logout</Link>
-        </div>
-      </div>
+    <Box sx={{ width: '100%', maxWidth: 1120, mx: 'auto' }}>
+      <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ mb: 3 }}>
+        <Typography variant='h5' fontWeight={600}>
+          Credit cards - {user?.name}
+        </Typography>
+        <Stack direction='row' spacing={2} alignItems='center'>
+          <Button component={Link} href='/todos/'>
+            Todos
+          </Button>
+          <Button component={Link} href='/auth/logout/' method='post' color='error' size='small'>
+            Logout
+          </Button>
+        </Stack>
+      </Stack>
 
-      <div className="mb-6">
-        <h2 className="text-lg font-medium mb-2">Add credit card</h2>
-        <Form action="/cards/create/" method="post" resetOnSuccess className="grid grid-cols-1 md:grid-cols-6 gap-2">
+      <Box sx={{ mb: 3 }}>
+        <Typography variant='h6' sx={{ mb: 1 }}>
+          Add credit card
+        </Typography>
+        <Form action='/cards/create/' method='post' resetOnSuccess>
           {({ processing }) => (
-            <>
-              <div className="md:col-span-2">
-                <input name="number" placeholder="Card number" className={`border rounded px-3 py-2 w-full ${errors?.number ? 'border-red-500' : ''}`} />
-                {errors?.number && <div className="mt-1 text-red-600 text-sm">{String(errors.number)}</div>}
-              </div>
-              <div className="md:col-span-2">
-                <input name="issuer" placeholder="Issuer (e.g., Visa, MasterCard, Bank)" className={`border rounded px-3 py-2 w-full ${errors?.issuer ? 'border-red-500' : ''}`} />
-                {errors?.issuer && <div className="mt-1 text-red-600 text-sm">{String(errors.issuer)}</div>}
-              </div>
-              <div className="md:col-span-1">
-                <input name="security_code" placeholder="CVV" className={`border rounded px-3 py-2 w-full ${errors?.security_code ? 'border-red-500' : ''}`} />
-                {errors?.security_code && <div className="mt-1 text-red-600 text-sm">{String(errors.security_code)}</div>}
-              </div>
-              <div className="md:col-span-1">
-                <div className="flex gap-2">
-                  <div className="w-full">
-                    <input name="valid_from" placeholder="Valid from (YYYY-MM-DD)" className={`border rounded px-3 py-2 w-full ${errors?.valid_from ? 'border-red-500' : ''}`} />
-                    {errors?.valid_from && <div className="mt-1 text-red-600 text-sm">{String(errors.valid_from)}</div>}
-                  </div>
-                  <div className="w-full">
-                    <input name="valid_to" placeholder="Valid to (YYYY-MM-DD)" className={`border rounded px-3 py-2 w-full ${errors?.valid_to ? 'border-red-500' : ''}`} />
-                    {errors?.valid_to && <div className="mt-1 text-red-600 text-sm">{String(errors.valid_to)}</div>}
-                  </div>
-                </div>
-              </div>
-              <div className="md:col-span-1">
-                <button type="submit" disabled={processing} className="bg-green-600 text-white rounded px-4 py-2 w-full disabled:opacity-50">Add credit card</button>
-              </div>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  name='number'
+                  placeholder='Card number'
+                  label='Card number'
+                  error={Boolean(errors?.number)}
+                  helperText={errors?.number ? String(errors.number) : ''}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  name='issuer'
+                  placeholder='Issuer (e.g., Visa, MasterCard, Bank)'
+                  label='Issuer'
+                  error={Boolean(errors?.issuer)}
+                  helperText={errors?.issuer ? String(errors.issuer) : ''}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={2}>
+                <TextField
+                  name='security_code'
+                  placeholder='CVV'
+                  label='CVV'
+                  error={Boolean(errors?.security_code)}
+                  helperText={errors?.security_code ? String(errors.security_code) : ''}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={2}>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                  <TextField
+                    name='valid_from'
+                    placeholder='Valid from (YYYY-MM-DD)'
+                    label='Valid from'
+                    error={Boolean(errors?.valid_from)}
+                    helperText={errors?.valid_from ? String(errors.valid_from) : ''}
+                    fullWidth
+                  />
+                  <TextField
+                    name='valid_to'
+                    placeholder='Valid to (YYYY-MM-DD)'
+                    label='Valid to'
+                    error={Boolean(errors?.valid_to)}
+                    helperText={errors?.valid_to ? String(errors.valid_to) : ''}
+                    fullWidth
+                  />
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={2}>
+                <Button type='submit' disabled={processing} variant='contained' color='success' fullWidth>
+                  Add credit card
+                </Button>
+              </Grid>
               {errors?.__all__ && (
-                <div className="md:col-span-6 text-red-600 text-sm">
-                  {Array.isArray(errors.__all__) ? errors.__all__.map((e, i) => <div key={i}>{String(e)}</div>) : <div>{String(errors.__all__)}</div>}
-                </div>
+                <Grid item xs={12}>
+                  <Typography variant='body2' color='error'>
+                    {Array.isArray(errors.__all__) ? (
+                      errors.__all__.map((e, i) => <span key={i}>{String(e)} </span>)
+                    ) : (
+                      <span>{String(errors.__all__)}</span>
+                    )}
+                  </Typography>
+                </Grid>
               )}
-            </>
+            </Grid>
           )}
         </Form>
-      </div>
+      </Box>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full border divide-y">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-2 text-left">Issuer</th>
-              <th className="px-4 py-2 text-left">Number</th>
-              <th className="px-4 py-2 text-left">Valid Period</th>
-              <th className="px-4 py-2 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody className='divide-y'>
+      <TableContainer component={Paper}>
+        <Table size='small'>
+          <TableHead>
+            <TableRow>
+              <TableCell>Issuer</TableCell>
+              <TableCell>Number</TableCell>
+              <TableCell>Valid Period</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {results.length === 0 && (
-              <tr>
-                <td colSpan={4} className='px-4 py-4 text-center text-gray-500'>No credit cards</td>
-              </tr>
+              <TableRow>
+                <TableCell colSpan={4} align='center'>
+                  No credit cards
+                </TableCell>
+              </TableRow>
             )}
             {results.map((c) => (
-              <tr key={c.id}>
-                <td className="px-4 py-2">{c.issuer}</td>
-                <td className="px-4 py-2">**** {String(c.number).slice(-4)}</td>
-                <td className="px-4 py-2">{c.valid_from} → {c.valid_to}</td>
-                <td className="px-4 py-2">
+              <TableRow key={c.id}>
+                <TableCell>{c.issuer}</TableCell>
+                <TableCell>**** {String(c.number).slice(-4)}</TableCell>
+                <TableCell>
+                  {c.valid_from} → {c.valid_to}
+                </TableCell>
+                <TableCell>
                   <details>
-                    <summary className="cursor-pointer text-blue-600 inline-block mb-2">Edit</summary>
-                    <Form action={`/cards/${c.id}/update/`} method="post" setDefaultsOnSuccess className="grid grid-cols-1 md:grid-cols-6 gap-2">
+                    <summary>Edit</summary>
+                    <Form action={`/cards/${c.id}/update/`} method='post' setDefaultsOnSuccess>
                       {({ processing, errors }) => (
-                        <>
-                          <div className="md:col-span-2">
-                            <input name="number" defaultValue={c.number} className={`border rounded px-3 py-2 w-full ${errors?.number ? 'border-red-500' : ''}`} />
-                            {errors?.number && <div className="mt-1 text-red-600 text-sm">{String(errors.number)}</div>}
-                          </div>
-                          <div className="md:col-span-2">
-                            <input name="issuer" defaultValue={c.issuer} className={`border rounded px-3 py-2 w-full ${errors?.issuer ? 'border-red-500' : ''}`} />
-                            {errors?.issuer && <div className="mt-1 text-red-600 text-sm">{String(errors.issuer)}</div>}
-                          </div>
-                          <div className="md:col-span-1">
-                            <input name="security_code" defaultValue={c.security_code} className={`border rounded px-3 py-2 w-full ${errors?.security_code ? 'border-red-500' : ''}`} />
-                            {errors?.security_code && <div className="mt-1 text-red-600 text-sm">{String(errors.security_code)}</div>}
-                          </div>
-                          <div className="md:col-span-1">
-                            <div className="flex gap-2">
-                              <div className="w-full">
-                                <input name="valid_from" defaultValue={c.valid_from} className={`border rounded px-3 py-2 w-full ${errors?.valid_from ? 'border-red-500' : ''}`} />
-                                {errors?.valid_from && <div className="mt-1 text-red-600 text-sm">{String(errors.valid_from)}</div>}
-                              </div>
-                              <div className="w-full">
-                                <input name="valid_to" defaultValue={c.valid_to} className={`border rounded px-3 py-2 w-full ${errors?.valid_to ? 'border-red-500' : ''}`} />
-                                {errors?.valid_to && <div className="mt-1 text-red-600 text-sm">{String(errors.valid_to)}</div>}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3 md:col-span-1">
-                            <button type="submit" disabled={processing} className="bg-blue-600 text-white rounded px-4 py-2 disabled:opacity-50">Save</button>
-                            <Link href={`/cards/${c.id}/delete/`} method="post" as="button" className="text-red-600">Delete</Link>
-                          </div>
+                        <Grid container spacing={2} sx={{ mt: 1 }}>
+                          <Grid item xs={12} md={4}>
+                            <TextField
+                              name='number'
+                              defaultValue={c.number}
+                              label='Card number'
+                              error={Boolean(errors?.number)}
+                              helperText={errors?.number ? String(errors.number) : ''}
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={4}>
+                            <TextField
+                              name='issuer'
+                              defaultValue={c.issuer}
+                              label='Issuer'
+                              error={Boolean(errors?.issuer)}
+                              helperText={errors?.issuer ? String(errors.issuer) : ''}
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={2}>
+                            <TextField
+                              name='security_code'
+                              defaultValue={c.security_code}
+                              label='CVV'
+                              error={Boolean(errors?.security_code)}
+                              helperText={errors?.security_code ? String(errors.security_code) : ''}
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={2}>
+                            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                              <TextField
+                                name='valid_from'
+                                defaultValue={c.valid_from}
+                                label='Valid from'
+                                error={Boolean(errors?.valid_from)}
+                                helperText={errors?.valid_from ? String(errors.valid_from) : ''}
+                                fullWidth
+                              />
+                              <TextField
+                                name='valid_to'
+                                defaultValue={c.valid_to}
+                                label='Valid to'
+                                error={Boolean(errors?.valid_to)}
+                                helperText={errors?.valid_to ? String(errors.valid_to) : ''}
+                                fullWidth
+                              />
+                            </Stack>
+                          </Grid>
+                          <Grid item xs={12} md={2}>
+                            <Stack direction='row' spacing={2}>
+                              <Button type='submit' disabled={processing} variant='contained'>
+                                Save
+                              </Button>
+                              <Button component={Link} href={`/cards/${c.id}/delete/`} method='post' color='error'>
+                                Delete
+                              </Button>
+                            </Stack>
+                          </Grid>
                           {errors?.__all__ && (
-                            <div className="md:col-span-6 text-red-600 text-sm">
-                              {Array.isArray(errors.__all__) ? errors.__all__.map((e, i) => <div key={i}>{String(e)}</div>) : <div>{String(errors.__all__)}</div>}
-                            </div>
+                            <Grid item xs={12}>
+                              <Typography variant='body2' color='error'>
+                                {Array.isArray(errors.__all__) ? (
+                                  errors.__all__.map((e, i) => <span key={i}>{String(e)} </span>)
+                                ) : (
+                                  <span>{String(errors.__all__)}</span>
+                                )}
+                              </Typography>
+                            </Grid>
                           )}
-                        </>
+                        </Grid>
                       )}
                     </Form>
                   </details>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-      <div className='mt-6 flex items-center justify-between'>
-        <div className='text-sm text-gray-600'>
+      <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{ mt: 3 }}>
+        <Typography variant='body2' color='text.secondary'>
           Page {current} of {numPages}
-        </div>
-        <nav className='inline-flex items-center gap-1' aria-label='Pagination'>
-          <Link href={`/cards/?page=1`} as='button' className={`px-3 py-1 rounded border ${current > 1 ? 'text-gray-700' : 'text-gray-400 cursor-not-allowed opacity-50'}`} disabled={current <= 1} preserveScroll aria-label='First page'>
+        </Typography>
+        <Stack direction='row' spacing={1} component='nav' aria-label='Pagination'>
+          <Button
+            component={Link}
+            href={`/cards/?page=1`}
+            disabled={current <= 1}
+            preserveScroll
+            aria-label='First page'
+          >
             First
-          </Link>
-          <Link href={`/cards/?page=${current - 1}`} as='button' className={`px-3 py-1 rounded border ${hasPrev ? 'text-gray-700' : 'text-gray-400 cursor-not-allowed opacity-50'}`} disabled={!hasPrev} preserveScroll aria-label='Previous page'>
+          </Button>
+          <Button
+            component={Link}
+            href={`/cards/?page=${current - 1}`}
+            disabled={!hasPrev}
+            preserveScroll
+            aria-label='Previous page'
+          >
             Prev
-          </Link>
+          </Button>
           {pages.map((p) => (
-            <Link key={p} href={`/cards/?page=${p}`} className={`px-3 py-1 rounded border ${p === current ? 'bg-blue-600 text-white border-blue-600' : 'text-gray-700'}`} preserveScroll preserveState replace={p === current} aria-current={p === current ? 'page' : undefined}>
+            <Button
+              key={p}
+              component={Link}
+              href={`/cards/?page=${p}`}
+              preserveScroll
+              preserveState
+              replace={p === current}
+              aria-current={p === current ? 'page' : undefined}
+              variant={p === current ? 'contained' : 'text'}
+              size='small'
+            >
               {p}
-            </Link>
+            </Button>
           ))}
-          <Link href={`/cards/?page=${current + 1}`} as='button' className={`px-3 py-1 rounded border ${hasNext ? 'text-gray-700' : 'text-gray-400 cursor-not-allowed opacity-50'}`} disabled={!hasNext} preserveScroll aria-label='Next page'>
+          <Button
+            component={Link}
+            href={`/cards/?page=${current + 1}`}
+            disabled={!hasNext}
+            preserveScroll
+            aria-label='Next page'
+          >
             Next
-          </Link>
-          <Link href={`/cards/?page=${numPages}`} as='button' className={`px-3 py-1 rounded border ${current < numPages ? 'text-gray-700' : 'text-gray-400 cursor-not-allowed opacity-50'}`} disabled={current >= numPages} preserveScroll aria-label='Last page'>
+          </Button>
+          <Button
+            component={Link}
+            href={`/cards/?page=${numPages}`}
+            disabled={current >= numPages}
+            preserveScroll
+            aria-label='Last page'
+          >
             Last
-          </Link>
-        </nav>
-      </div>
-    </div>
+          </Button>
+        </Stack>
+      </Stack>
+    </Box>
   )
 }

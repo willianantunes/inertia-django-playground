@@ -1,58 +1,68 @@
-import { Form, Link } from '@inertiajs/react'
+import { Form, Link, usePage } from '@inertiajs/react'
+import { Box, Button, Stack, TextField, Typography, Alert } from '@mui/material'
 
 export default function Login() {
+  const { props } = usePage()
+  const messages = props?.messages || []
+
   return (
-    <div className='max-w-md w-full'>
-      <h1 className='text-2xl font-semibold mb-6 text-center'>Sign in</h1>
-      <Form action='/auth/login/' method='post' className='space-y-4'>
-        {({ processing, errors }) => {
-          console.log(`############`)
-          console.log(errors)
-          console.log(processing)
-          return (
-            <>
-              <div>
-                <label htmlFor='email' className='block text-sm font-medium'>
-                  Email
-                </label>
-                <input
-                  id='email'
-                  name='email'
-                  type='email'
-                  required
-                  className='mt-1 block w-full border rounded px-3 py-2'
-                />
-                {errors.email && <div className='text-red-600 text-sm mt-1'>{errors.email}</div>}
-              </div>
-              <div>
-                <label htmlFor='password' className='block text-sm font-medium'>
-                  Password
-                </label>
-                <input
-                  id='password'
-                  name='password'
-                  type='password'
-                  required
-                  className='mt-1 block w-full border rounded px-3 py-2'
-                />
-                {errors.password && <div className='text-red-600 text-sm mt-1'>{errors.password}</div>}
-              </div>
-              <div className='flex items-center justify-between'>
-                <button
-                  type='submit'
-                  disabled={processing}
-                  className='bg-blue-600 text-white rounded px-4 py-2 disabled:opacity-50'
-                >
-                  {processing ? 'Signing in...' : 'Sign in'}
-                </button>
-                <Link href='/' className='text-sm text-blue-600'>
-                  Back to home
-                </Link>
-              </div>
-            </>
-          )
-        }}
+    <Box sx={{ maxWidth: 480, width: '100%', mx: 'auto' }}>
+      <Typography variant='h5' fontWeight={600} align='center' gutterBottom>
+        Sign in
+      </Typography>
+      <Form action='/auth/login/' method='post'>
+        {({ processing, errors }) => (
+          <Stack spacing={2}>
+            {messages.length > 0 && (
+              <Stack spacing={1}>
+                {messages.map((msg, idx) => (
+                  <Alert
+                    key={idx}
+                    severity={['error', 'warning', 'info', 'success'].includes(msg.level_tag) ? msg.level_tag : 'info'}
+                  >
+                    {msg.message}
+                  </Alert>
+                ))}
+              </Stack>
+            )}
+            {errors?.__all__ && (
+              <Alert severity='error'>
+                {Array.isArray(errors.__all__)
+                  ? errors.__all__.map((e, i) => <span key={i}>{String(e)} </span>)
+                  : String(errors.__all__)}
+              </Alert>
+            )}
+            <TextField
+              id='email'
+              name='email'
+              type='email'
+              label='Email'
+              required
+              error={Boolean(errors.email)}
+              helperText={errors.email ? String(errors.email) : ''}
+              fullWidth
+            />
+            <TextField
+              id='password'
+              name='password'
+              type='password'
+              label='Password'
+              required
+              error={Boolean(errors.password)}
+              helperText={errors.password ? String(errors.password) : ''}
+              fullWidth
+            />
+            <Stack direction='row' alignItems='center' justifyContent='space-between'>
+              <Button type='submit' variant='contained' disabled={processing}>
+                {processing ? 'Signing in...' : 'Sign in'}
+              </Button>
+              <Button component={Link} href='/' size='small'>
+                Back to home
+              </Button>
+            </Stack>
+          </Stack>
+        )}
       </Form>
-    </div>
+    </Box>
   )
 }

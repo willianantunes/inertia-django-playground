@@ -21,6 +21,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  app-production:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: ".env"
+    environment:
+      DJANGO_DEBUG: "False"
+      DJANGO_VITE_DEBUG: "False"
+    ports:
+      - "${DJANGO_BIND_PORT}:${DJANGO_BIND_PORT}"
 
 networks:
   default: # "default" name is important because it's automatically used by all services. Check out: https://stackoverflow.com/a/78030885

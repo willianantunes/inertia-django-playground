@@ -1,9 +1,5 @@
-import csv
-import io
 import json
 
-from django.contrib import messages
-from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -13,19 +9,18 @@ from django.shortcuts import redirect
 from django.views.decorators.http import require_GET
 from django.views.decorators.http import require_http_methods
 from inertia import render
-from inertia import share
 
+from inertia_django_playground.apps.core.forms import CreditCardForm
+from inertia_django_playground.apps.core.forms import EmailAuthenticationForm
+from inertia_django_playground.apps.core.forms import TodoForm
+from inertia_django_playground.apps.core.forms import TodoUploadCsvForm
 from inertia_django_playground.apps.core.models import CreditCard
 from inertia_django_playground.apps.core.models import Todo
-from inertia_django_playground.forms import CreditCardForm
-from inertia_django_playground.forms import EmailAuthenticationForm
-from inertia_django_playground.forms import TodoForm
-from inertia_django_playground.support.inertia_workarounds import get_cleaned_data_or_redirect_with_errors
+from inertia_django_playground.support.inertia_workarounds import continue_or_redirect_with_errors
 
 
 @require_GET
 def home(request):
-    # Public landing page rendered via Inertia. Authenticated users still see landing, can navigate to app.
     return render(
         request,
         "Index",
@@ -40,16 +35,11 @@ def login_view(request):
     if request.method == "GET":
         if request.user and request.user.is_authenticated and request.user.is_active:
             return redirect("todos:index")
-        return render(request, "Auth/Login", {})
+        return render(request, "Auth/Login")
     form = EmailAuthenticationForm(json.loads(request.body))
     if form.is_valid():
-        email = form.cleaned_data["email"]
-        password = form.cleaned_data["password"]
-        user = authenticate(email=email, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect("todos:index")
-        # TODO ADD MESSAGE WHEN NO USER IS FOUND
+        login(request, form.user)
+        return redirect("todos:index")
     return render(request, "Auth/Login", props={"errors": form.errors})
 
 
@@ -91,24 +81,22 @@ def todos_index(request):
 @require_http_methods(["POST"])
 def todos_create(request):
     form = TodoForm(json.loads(request.body) | {"user": request.user.id})
-    get_cleaned_data_or_redirect_with_errors(form, redirect("todos:index"))
+    continue_or_redirect_with_errors(form, redirect("todos:index"))
     form.save()
     return redirect("todos:index")
 
 
 @login_required
 @require_http_methods(["GET", "POST"])
-def todos_edit(request, todo_id: int):
-    todo = get_object_or_404(Todo, id=todo_id, user=request.user)
+def todos_edit(request, target_id: int):
+    todo = get_object_or_404(Todo, id=target_id, user=request.user)
     if request.method == "GET":
         return render(
             request, "Todos/Edit", {"todo": {"id": todo.id, "title": todo.title, "completed": todo.completed}}
         )
     form = TodoForm(json.loads(request.body) | {"user": request.user.id}, instance=todo)
     if not form.is_valid():
-        # completed = request.POST.get("completed") in ("1", "true", "on", True)
-        messages.error(request, "Title is required")
-        response = render(
+        return render(
             request,
             "Todos/Edit",
             {
@@ -116,66 +104,28 @@ def todos_edit(request, todo_id: int):
                     "id": todo.id,
                     "title": todo.title,
                     "completed": todo.completed,
-                }
+                },
+                "errors": form.errors,
             },
         )
-        return response
-
     form.save()
-    messages.success(request, "Todo updated")
     return redirect("todos:index")
 
 
 @login_required
 @require_http_methods(["POST"])
-def todos_delete(request, todo_id: int):
-    todo = get_object_or_404(Todo, id=todo_id, user=request.user)
+def todos_delete(request, target_id: int):
+    todo = get_object_or_404(Todo, id=target_id, user=request.user)
     todo.delete()
-    messages.success(request, "Todo deleted")
     return redirect("todos:index")
 
 
 @login_required
 @require_http_methods(["POST"])
 def todos_upload_csv(request):
-    """
-    Accepts a CSV file upload and creates todos for the logged-in user.
-    Expected CSV format: header optional, one todo title per row in first column.
-    """
-    # Inertia Form sends multipart automatically when file input is present.
-    uploaded = request.FILES.get("file")
-    if not uploaded:
-        messages.error(request, "Please select a CSV file to upload.")
-        return redirect("todos:index")
-    try:
-        text = io.TextIOWrapper(uploaded.file, encoding="utf-8")
-        content = text.read()
-        uploaded.file.seek(0)
-        reader = csv.reader(io.StringIO(content))
-    except Exception:
-        messages.error(request, "Could not read the uploaded file.")
-        return redirect("todos:index")
-
-    created = 0
-    entries = []
-    for i, row in enumerate(reader):
-        if not row:
-            continue
-        title = row[0]
-        completed = row[1]
-        if i == 0 and title.lower() in ("title", "completed"):
-            continue
-        if not title:
-            continue
-        form = TodoForm({"user": request.user.id, "title": title, "completed": completed})
-        if form.is_valid():
-            entries.append(Todo(**form.cleaned_data))
-            created += 1
-    Todo.objects.bulk_create(entries)
-    if created:
-        messages.success(request, f"Imported {created} todos from CSV.")
-    else:
-        messages.info(request, "No todos were imported from the CSV file.")
+    form = TodoUploadCsvForm(request)
+    continue_or_redirect_with_errors(form, redirect("todos:index"))
+    Todo.objects.bulk_create(form.todos_entries)
     return redirect("todos:index")
 
 
@@ -221,27 +171,24 @@ def credit_cards_index(request):
 def credit_cards_create(request):
     data = json.loads(request.body)
     form = CreditCardForm(data | {"user": request.user.id})
-    get_cleaned_data_or_redirect_with_errors(form, redirect("credit_cards:index"))
+    continue_or_redirect_with_errors(form, redirect("credit_cards:index"))
     form.save()
     return redirect("credit_cards:index")
 
 
 @login_required
 @require_http_methods(["POST"])
-def credit_cards_delete(request, card_id: int):
-    card = get_object_or_404(CreditCard, id=card_id, user=request.user)
+def credit_cards_delete(request, target_id: int):
+    card = get_object_or_404(CreditCard, id=target_id, user=request.user)
     card.delete()
-    messages.success(request, "Credit card deleted")
     return redirect("credit_cards:index")
 
 
 @login_required
 @require_http_methods(["POST"])
-def credit_cards_update(request, card_id: int):
-    card = get_object_or_404(CreditCard, id=card_id, user=request.user)
-    data = json.loads(request.body)
-    form = CreditCardForm(data | {"user": request.user.id}, instance=card)
-    if not form.is_valid():
-        return redirect("credit_cards:index", props={"errors": form.errors})
+def credit_cards_update(request, target_id: int):
+    card = get_object_or_404(CreditCard, id=target_id, user=request.user)
+    form = CreditCardForm(json.loads(request.body) | {"user": request.user.id}, instance=card)
+    continue_or_redirect_with_errors(form, redirect("credit_cards:index"))
     form.save()
     return redirect("credit_cards:index")

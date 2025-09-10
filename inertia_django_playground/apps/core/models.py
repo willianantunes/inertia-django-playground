@@ -8,7 +8,7 @@ from django.utils import timezone
 
 
 class StandardModelMixin(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="Id")
+    id = models.BigAutoField(primary_key=True, editable=False, verbose_name="Id")
     created_at = models.DateTimeField(auto_now_add=True, editable=False, verbose_name="Created at")
     updated_at = models.DateTimeField(auto_now=True, editable=False, verbose_name="Updated at")
 
@@ -60,7 +60,7 @@ class User(AbstractBaseUser, PermissionsMixin, StandardModelMixin):
         return self.email
 
 
-class Todo(models.Model):
+class Todo(StandardModelMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="todos")
     title = models.CharField(max_length=255)
     completed = models.BooleanField(default=False)
@@ -71,15 +71,13 @@ class Todo(models.Model):
         return self.title
 
 
-class CreditCard(models.Model):
+class CreditCard(StandardModelMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="credit_cards")
     number = models.CharField(max_length=19)
     issuer = models.CharField(max_length=100)
     valid_from = models.DateField()
     valid_to = models.DateField()
     security_code = models.CharField(max_length=4)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-created_at"]
