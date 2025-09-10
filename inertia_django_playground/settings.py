@@ -58,7 +58,7 @@ ROOT_URLCONF = "inertia_django_playground.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -119,25 +119,30 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "static/"
-# Name of static files folder (after called python manage.py collectstatic)
-STATIC_ROOT = BASE_DIR / "static"
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# Django collects the static files into STATIC_ROOT (python manage.py collectstatic)
+STATIC_ROOT = os.getenv("STATIC_ROOT", "staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR, STATIC_ROOT)
+# Your CDN FQDN for example or whatever is hosting your statics/assets
+STATIC_HOST = os.environ.get("DJANGO_STATIC_HOST", "")
+# The REQUEST PATH where your statics/assets are
+STATIC_URL = os.getenv("STATIC_URL", "/static/")
+STATIC_URL = STATIC_HOST + STATIC_URL
 # If use HMR or not.
 DJANGO_VITE = {
     "default": {
-        "dev_mode": DEBUG,
+        "dev_mode": strtobool(os.getenv("DJANGO_VITE_DEBUG", "False")),
         "dev_server_host": os.getenv("DJANGO_VITE_DEV_SERVER_HOST", "localhost"),
         "dev_server_port": int(os.getenv("DJANGO_VITE_DEV_SERVER_PORT", 5173)),
+        "manifest_path": BASE_DIR / "frontend" / "dist" / "manifest.json",
     }
 }
 # Where ViteJS assets are built.
 DJANGO_VITE_ASSETS_PATH = BASE_DIR / "frontend" / "dist"
-# Include DJANGO_VITE_ASSETS_PATH into STATICFILES_DIRS to be copied inside
-# when run command python manage.py collectstatic
+# Add DJANGO_VITE_ASSETS_PATH into STATICFILES_DIRS to be copied inside when run command python manage.py collectstatic
 STATICFILES_DIRS = [DJANGO_VITE_ASSETS_PATH]
 
-INERTIA_LAYOUT = "base.html"
+INERTIA_LAYOUT = "core/index.html"
 INERTIA_SSR_URL = inertia_settings.INERTIA_SSR_URL
 INERTIA_SSR_ENABLED = inertia_settings.INERTIA_SSR_ENABLED
 INERTIA_JSON_ENCODER = inertia_settings.INERTIA_JSON_ENCODER

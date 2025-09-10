@@ -1,6 +1,31 @@
 # Inertia Django Playground
 
-## Steps to run the project
+This project demonstrates how to effectively integrate Django, Vite, React, Whitenoise, and Inertia.js. It serves as a practical example for developers looking to build a full-stack application using these technologies.
+
+Key features and examples include:
+
+* **CRUD Operations:** Discover how to implement create, read, update, and delete (CRUD) operations for the [`Todo`](./inertia_django_playground/apps/core/models.py) and [`CreditCard`](./inertia_django_playground/apps/core/models.py) models.
+* **Form Handling:** Learn how to handle Inertia.js forms using Django's powerful form validation and processing capabilities.
+
+## Accessing and running the project
+
+When the server is up, you can access it using the credentials `admin@admin.com:admin` at:
+
+- http://localhost:8000/
+
+Admin panel:
+
+- http://localhost:8000/admin/
+
+### With Docker
+
+Execute the following command in the terminal:
+
+```shell
+docker compose run --service-ports --rm app-production
+```
+
+### Without Docker
 
 Execute the following commands in the terminal:
 
@@ -9,10 +34,6 @@ npm install
 npm run dev
 docker compose run --service-ports --rm remote-interpreter
 ```
-
-Then you can access:
-
-- http://localhost:8080/
 
 ## Creating the project from scratch from the template
 

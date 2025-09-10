@@ -2,9 +2,7 @@ from django.contrib import admin
 from django.urls import include
 from django.urls import path
 
-from . import views
-
-app_name = "root"
+from inertia_django_playground.apps.core import views
 
 auth_patterns = (
     [

@@ -3,7 +3,11 @@
 Tech stack you should focus on when executing tasks:
 
 - Backend: Django.
-- Frontend: React, inertiajs, and tailwindcss.
+- Frontend:
+  - Frameworks: React, inertiajs
+  - Styling / UI: Tailwind CSS, shadcn/ui
+  - Icons: Heroicons
+  - Animation: Motion
 
 ## Usage of `'@inertiajs/react'`
 
@@ -629,4 +633,4 @@ def contact_view(request):
 
 ## Testing information
 
-DO NOT WRITE TESTS.
+Do not write tests.
