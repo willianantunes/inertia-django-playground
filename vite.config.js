@@ -12,7 +12,7 @@ export default defineConfig((mode) => {
     plugins: [react()],
     resolve: {
       alias: {
-        '@': resolve(INPUT_DIR, 'js'),
+        '@': resolve(INPUT_DIR),
       },
     },
     root: resolve(INPUT_DIR),
@@ -31,8 +31,8 @@ export default defineConfig((mode) => {
       outDir: resolve(OUTPUT_DIR),
       rollupOptions: {
         input: {
-          main: join(INPUT_DIR, '/js/main.jsx'),
-          css: join(INPUT_DIR, '/css/main.css'),
+          main: join(INPUT_DIR, '/main.tsx'),
+          css: join(INPUT_DIR, '/styles/main.css'),
         },
       },
     },

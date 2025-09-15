@@ -3,7 +3,7 @@ import { Box, Button, Stack, TextField, Typography, Alert } from '@mui/material'
 
 export default function Login() {
   const { props } = usePage()
-  const messages = props?.messages || []
+  const messages: any = props?.messages || []
 
   return (
     <Box sx={{ maxWidth: 480, width: '100%', mx: 'auto' }}>
