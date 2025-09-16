@@ -54,7 +54,7 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
   const windowSize = 5
   const half = Math.floor(windowSize / 2)
   let start = Math.max(1, current - half)
-  let end = Math.min(numPages, start + windowSize - 1)
+  const end = Math.min(numPages, start + windowSize - 1)
   start = Math.max(1, Math.min(start, end - windowSize + 1))
   const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i)
 
