@@ -1,46 +1,11 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "target": "es2020",
-    "module": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "checkJs": false,
-    "noEmit": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "incremental": true,
-    "jsx": "preserve",
-    "noImplicitAny": false,
-    "noImplicitReturns": false,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "types": [
-      "vite/client"
-    ],
-    "paths": {
-      "@/*": [
-        "frontend/*"
-      ],
-      "@tests/*": [
-        "tests/*"
-      ]
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
     }
-  },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx",
-    "frontend/types/**/*.d.ts"
-  ],
-  "exclude": [
-    "node_modules"
   ]
 }
