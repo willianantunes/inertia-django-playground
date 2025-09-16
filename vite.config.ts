@@ -1,4 +1,5 @@
 import { join, resolve } from 'node:path'
+
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv } from 'vite'
 

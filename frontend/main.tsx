@@ -1,12 +1,13 @@
 import 'vite/modulepreload-polyfill'
-import { InertiaProgress } from '@inertiajs/progress'
-import axios from 'axios'
 
-import { createRoot } from 'react-dom/client'
+import { InertiaProgress } from '@inertiajs/progress'
 import { createInertiaApp } from '@inertiajs/react'
-import Layout from './components/Layout'
+import axios from 'axios'
+import { createRoot } from 'react-dom/client'
 
 import '@/styles/main.css'
+
+import Layout from './components/Layout'
 
 const pages: any = import.meta.glob('./pages/**/*.tsx', { eager: true })
 

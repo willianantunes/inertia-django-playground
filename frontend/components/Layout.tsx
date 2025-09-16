@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from 'react'
+
 import { Link as InertiaLink } from '@inertiajs/react'
 import { AppBar, Box, Button, Container, CssBaseline, Toolbar, Typography } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
