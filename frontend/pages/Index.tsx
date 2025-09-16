@@ -1,7 +1,11 @@
 import { Link } from '@inertiajs/react'
 import { Box, Button, Container, Grid, List, ListItem, ListItemText, Paper, Stack, Typography } from '@mui/material'
 
-export default function Index({ authenticated }) {
+interface PageIndexProps {
+  authenticated: boolean
+}
+
+export default function Index({ authenticated }: PageIndexProps) {
   return (
     <Box>
       <Container maxWidth='lg' sx={{ py: 8 }}>
