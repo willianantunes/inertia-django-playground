@@ -15,7 +15,36 @@ import {
   Paper,
 } from '@mui/material'
 
-export default function CreditCardsIndex({ user, page_cards, errors }) {
+interface User {
+  name: string
+}
+
+interface CreditCard {
+  id: number
+  number: string
+  issuer: string
+  valid_from: string
+  valid_to: string
+  security_code: string
+  created_at: string
+  updated_at: string
+}
+
+interface PageCards {
+  has_previous: boolean
+  has_next: boolean
+  number: number
+  num_pages: number
+  results: CreditCard[]
+}
+
+interface PageCreditCardsIndexProps {
+  user: User
+  page_cards: PageCards
+  errors?: Record<string, string | string[]>
+}
+
+export default function CreditCardsIndex({ user, page_cards, errors }: PageCreditCardsIndexProps) {
   const results = page_cards?.results ?? []
   const numPages = page_cards?.num_pages ?? 1
   const current = page_cards?.number ?? 1
@@ -25,7 +54,7 @@ export default function CreditCardsIndex({ user, page_cards, errors }) {
   const windowSize = 5
   const half = Math.floor(windowSize / 2)
   let start = Math.max(1, current - half)
-  let end = Math.min(numPages, start + windowSize - 1)
+  const end = Math.min(numPages, start + windowSize - 1)
   start = Math.max(1, Math.min(start, end - windowSize + 1))
   const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i)
 

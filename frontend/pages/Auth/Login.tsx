@@ -1,8 +1,18 @@
 import { Form, Link, usePage } from '@inertiajs/react'
 import { Box, Button, Stack, TextField, Typography, Alert } from '@mui/material'
 
+interface Message {
+  message: string
+  level_tag: 'error' | 'warning' | 'info' | 'success'
+}
+
+interface PageLoginProps {
+  messages?: Message[]
+  [key: string]: any
+}
+
 export default function Login() {
-  const { props } = usePage()
+  const { props } = usePage<PageLoginProps>()
   const messages = props?.messages || []
 
   return (
@@ -13,7 +23,7 @@ export default function Login() {
       <Form action='/auth/login/' method='post'>
         {({ processing, errors }) => (
           <Stack spacing={2}>
-            {messages.length > 0 && (
+            {messages?.length > 0 && (
               <Stack spacing={1}>
                 {messages.map((msg, idx) => (
                   <Alert

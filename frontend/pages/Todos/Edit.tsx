@@ -1,7 +1,18 @@
 import { Form, Link } from '@inertiajs/react'
 import { Box, Button, Checkbox, FormControlLabel, Stack, TextField, Typography } from '@mui/material'
 
-export default function TodosEdit({ todo }) {
+interface Todo {
+  id: number
+  title: string
+  completed: boolean
+}
+
+interface PageTodosEditProps {
+  todo: Todo
+  errors?: Record<string, string | string[]>
+}
+
+export default function TodosEdit({ todo }: PageTodosEditProps) {
   return (
     <Box sx={{ width: '100%', maxWidth: 640, mx: 'auto' }}>
       <Box sx={{ mb: 2 }}>

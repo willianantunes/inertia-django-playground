@@ -11,7 +11,6 @@ services:
       - .:/app
     ports:
       - "${DJANGO_BIND_PORT}:${DJANGO_BIND_PORT}"
-      - "5173:5173" # Vite debug port
     command:
       [
         "./scripts/start-development.sh",
@@ -21,6 +20,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
   app-production:
     build:
       context: .

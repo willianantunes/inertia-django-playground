@@ -1,0 +1,17 @@
+FROM node:22-alpine
+
+RUN apk add --no-cache bash
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci
+
+COPY frontend ./frontend
+COPY vite.config.js jsconfig.json tsconfig.json ./
+
+ENTRYPOINT [ "/bin/sh", "-c" ]
+
+CMD [ "npm run dev" ]
+

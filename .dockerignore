@@ -10,4 +10,5 @@
 !pyproject.toml
 !gunicorn_config.py
 !*.config.js
+!*.config.ts
 !jsconfig.json

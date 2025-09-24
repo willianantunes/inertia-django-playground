@@ -1,8 +1,11 @@
-import { Link, usePage } from '@inertiajs/react'
+import { Link } from '@inertiajs/react'
 import { Box, Button, Container, Grid, List, ListItem, ListItemText, Paper, Stack, Typography } from '@mui/material'
 
-export default function Index({ authenticated }) {
-  const { url } = usePage()
+interface PageIndexProps {
+  authenticated: boolean
+}
+
+export default function Index({ authenticated }: PageIndexProps) {
   return (
     <Box>
       <Container maxWidth='lg' sx={{ py: 8 }}>
@@ -24,7 +27,7 @@ export default function Index({ authenticated }) {
           </Stack>
 
           <Grid container spacing={6} alignItems='center'>
-            <Grid item xs={12} lg={6}>
+            <Grid size={{ xs: 12, lg: 6 }}>
               <Stack spacing={3}>
                 <Typography variant='overline' color='success.main'>
                   Classic productivity
@@ -47,12 +50,18 @@ export default function Index({ authenticated }) {
 
                 <Grid container spacing={2} sx={{ mt: 1 }}>
                   {[
-                    { primary: 'Add and complete tasks', secondary: 'Stay focused with simple task management.' },
-                    { primary: 'Fast & seamless', secondary: 'SPA-like navigation with server-side rendering.' },
+                    {
+                      primary: 'Add and complete tasks',
+                      secondary: 'Stay focused with simple task management.',
+                    },
+                    {
+                      primary: 'Fast & seamless',
+                      secondary: 'SPA-like navigation with server-side rendering.',
+                    },
                     { primary: 'Secure', secondary: 'Todos are protected behind login.' },
                     { primary: 'Modern stack', secondary: 'Django, Inertia.js, React, and MUI.' },
                   ].map((item, idx) => (
-                    <Grid item xs={12} sm={6} key={idx}>
+                    <Grid size={{ xs: 12, sm: 6 }} key={idx}>
                       <Paper variant='outlined' sx={{ p: 2 }}>
                         <Typography variant='subtitle1' fontWeight={600}>
                           {item.primary}
@@ -75,7 +84,7 @@ export default function Index({ authenticated }) {
                 </Box>
               </Stack>
             </Grid>
-            <Grid item xs={12} lg={6}>
+            <Grid size={{ xs: 12, lg: 6 }}>
               <Paper variant='outlined' sx={{ p: 3 }}>
                 <Typography variant='subtitle1' fontWeight={600} gutterBottom>
                   Your Todos

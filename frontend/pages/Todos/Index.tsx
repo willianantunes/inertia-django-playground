@@ -14,7 +14,33 @@ import {
   Paper,
 } from '@mui/material'
 
-export default function TodosIndex({ user, page_todos, errors }) {
+interface User {
+  name: string
+}
+
+interface Todo {
+  id: number
+  title: string
+  completed: boolean
+  created_at: string
+  updated_at: string
+}
+
+interface PageTodos {
+  has_previous: boolean
+  has_next: boolean
+  number: number
+  num_pages: number
+  results: Todo[]
+}
+
+interface PageTodosIndexProps {
+  user: User
+  page_todos: PageTodos
+  errors?: Record<string, string | string[]>
+}
+
+export default function TodosIndex({ user, page_todos, errors }: PageTodosIndexProps) {
   const results = page_todos?.results ?? []
   const numPages = page_todos?.num_pages ?? 1
   const current = page_todos?.number ?? 1
@@ -24,7 +50,7 @@ export default function TodosIndex({ user, page_todos, errors }) {
   const windowSize = 5
   const half = Math.floor(windowSize / 2)
   let start = Math.max(1, current - half)
-  let end = Math.min(numPages, start + windowSize - 1)
+  const end = Math.min(numPages, start + windowSize - 1)
   start = Math.max(1, Math.min(start, end - windowSize + 1))
   const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i)
 
