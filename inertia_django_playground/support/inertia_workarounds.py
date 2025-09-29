@@ -19,6 +19,10 @@ class InertiaValidationError(Exception):
         self.errors = errors
 
 
+def is_inertia_request(request: HttpRequest) -> bool:
+    return "X-Inertia" in request.headers
+
+
 def continue_or_redirect_with_errors(form: BaseForm, redirect: InertiaRedirect) -> dict:
     """Helper to validate a Django form and either return cleaned_data or redirect with the form errors.
     Only use this option if the request path your form was rendered on is not the same as the one you are posting to."""

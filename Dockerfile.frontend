@@ -9,7 +9,7 @@ COPY package*.json ./
 RUN npm ci
 
 COPY frontend ./frontend
-COPY vite.config.js jsconfig.json tsconfig.json ./
+COPY vite.config.ts jsconfig.json tsconfig.json ./
 
 ENTRYPOINT [ "/bin/sh", "-c" ]
 

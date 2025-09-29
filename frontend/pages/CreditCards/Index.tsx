@@ -81,7 +81,7 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
         <Form action='/cards/create/' method='post' resetOnSuccess>
           {({ processing }) => (
             <Grid container spacing={2}>
-              <Grid item xs={12} md={4}>
+              <Grid size={{ xs: 12, md: 3 }}>
                 <TextField
                   name='number'
                   placeholder='Card number'
@@ -91,7 +91,7 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} md={4}>
+              <Grid size={{ xs: 12, md: 2 }}>
                 <TextField
                   name='issuer'
                   placeholder='Issuer (e.g., Visa, MasterCard, Bank)'
@@ -101,7 +101,7 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} md={2}>
+              <Grid size={{ xs: 4, md: 1 }}>
                 <TextField
                   name='security_code'
                   placeholder='CVV'
@@ -111,11 +111,11 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} md={2}>
+              <Grid size={{ xs: 4, md: 4 }}>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                   <TextField
                     name='valid_from'
-                    placeholder='Valid from (YYYY-MM-DD)'
+                    placeholder='(YYYY-MM-DD)'
                     label='Valid from'
                     error={Boolean(errors?.valid_from)}
                     helperText={errors?.valid_from ? String(errors.valid_from) : ''}
@@ -123,7 +123,7 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
                   />
                   <TextField
                     name='valid_to'
-                    placeholder='Valid to (YYYY-MM-DD)'
+                    placeholder='(YYYY-MM-DD)'
                     label='Valid to'
                     error={Boolean(errors?.valid_to)}
                     helperText={errors?.valid_to ? String(errors.valid_to) : ''}
@@ -131,13 +131,13 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
                   />
                 </Stack>
               </Grid>
-              <Grid item xs={12} md={2}>
+              <Grid size={{ xs: 4, md: 2 }}>
                 <Button type='submit' disabled={processing} variant='contained' color='success' fullWidth>
                   Add credit card
                 </Button>
               </Grid>
               {errors?.__all__ && (
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Typography variant='body2' color='error'>
                     {Array.isArray(errors.__all__) ? (
                       errors.__all__.map((e, i) => <span key={i}>{String(e)} </span>)
@@ -183,7 +183,7 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
                     <Form action={`/cards/${c.id}/update/`} method='post' setDefaultsOnSuccess>
                       {({ processing, errors }) => (
                         <Grid container spacing={2} sx={{ mt: 1 }}>
-                          <Grid item xs={12} md={4}>
+                          <Grid size={{ xs: 10, md: 3 }}>
                             <TextField
                               name='number'
                               defaultValue={c.number}
@@ -193,7 +193,7 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
                               fullWidth
                             />
                           </Grid>
-                          <Grid item xs={12} md={4}>
+                          <Grid size={{ xs: 10, md: 3 }}>
                             <TextField
                               name='issuer'
                               defaultValue={c.issuer}
@@ -203,7 +203,7 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
                               fullWidth
                             />
                           </Grid>
-                          <Grid item xs={12} md={2}>
+                          <Grid size={{ xs: 10, md: 2 }}>
                             <TextField
                               name='security_code'
                               defaultValue={c.security_code}
@@ -213,7 +213,7 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
                               fullWidth
                             />
                           </Grid>
-                          <Grid item xs={12} md={2}>
+                          <Grid size={{ xs: 10, md: 4 }}>
                             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                               <TextField
                                 name='valid_from'
@@ -233,7 +233,7 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
                               />
                             </Stack>
                           </Grid>
-                          <Grid item xs={12} md={2}>
+                          <Grid size={{ xs: 10, md: 2 }}>
                             <Stack direction='row' spacing={2}>
                               <Button type='submit' disabled={processing} variant='contained'>
                                 Save
@@ -244,7 +244,7 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
                             </Stack>
                           </Grid>
                           {errors?.__all__ && (
-                            <Grid item xs={12}>
+                            <Grid size={{ xs: 12 }}>
                               <Typography variant='body2' color='error'>
                                 {Array.isArray(errors.__all__) ? (
                                   errors.__all__.map((e, i) => <span key={i}>{String(e)} </span>)

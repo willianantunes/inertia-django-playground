@@ -7,11 +7,11 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY frontend ./frontend
-COPY vite.config.js jsconfig.json ./
+COPY vite.config.ts jsconfig.json ./
 
 RUN npm run build
 
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 WORKDIR /app
 
