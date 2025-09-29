@@ -7,7 +7,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY frontend ./frontend
-COPY vite.config.js jsconfig.json ./
+COPY vite.config.ts jsconfig.json ./
 
 RUN npm run build
 
