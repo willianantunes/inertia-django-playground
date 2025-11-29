@@ -4,11 +4,7 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
     /* Bundler mode */
@@ -28,19 +24,12 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "forceConsistentCasingInFileNames": true,
+    "types": ["@testing-library/jest-dom"],
     "paths": {
-      "@/*": [
-        "frontend/*"
-      ],
-      "@tests/*": [
-        "tests/*"
-      ]
+      "@/*": ["frontend/*"],
+      "@tests/*": ["tests/*"]
     }
   },
-  "include": [
-    "frontend",
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["frontend"],
+  "exclude": ["node_modules"]
 }

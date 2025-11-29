@@ -9,7 +9,12 @@ import '@/styles/main.css'
 
 import Layout from './components/Layout'
 
-const pages: any = import.meta.glob('./pages/**/*.tsx', { eager: true })
+// Exclude test files from Vite's page auto-imports to avoid loading them in dev
+const pages: any = import.meta.glob([
+  './pages/**/*.tsx',
+  '!./pages/**/*.test.tsx',
+  '!./pages/**/*.spec.tsx',
+], { eager: true })
 
 document.addEventListener('DOMContentLoaded', async () => {
   axios.defaults.xsrfCookieName = 'csrftoken'
