@@ -1,12 +1,12 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from "@testing-library/react";
 
-import CreditCardsIndex from './Index'
+import CreditCardsIndex from "./Index";
 
-describe('CreditCards/Index page', () => {
-  it('renders heading and add form controls', () => {
+describe("CreditCards/Index page", () => {
+  it("renders heading and add form controls", () => {
     render(
       <CreditCardsIndex
-        user={{ name: 'Bob' }}
+        user={{ name: "Bob" }}
         page_cards={{
           has_previous: false,
           has_next: false,
@@ -15,10 +15,10 @@ describe('CreditCards/Index page', () => {
           results: [],
         }}
         errors={{}}
-      />
-    )
+      />,
+    );
 
-    expect(screen.getByText(/Credit cards - Bob/)).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /Add credit card/i })).toBeInTheDocument()
-  })
-})
+    expect(screen.getByText(/Credit cards - Bob/)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Add credit card/i })).toBeInTheDocument();
+  });
+});

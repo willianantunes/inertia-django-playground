@@ -1,11 +1,11 @@
-import { render, screen } from '@testing-library/react'
-import TodosIndex from './Index'
+import { render, screen } from "@testing-library/react";
+import TodosIndex from "./Index";
 
-describe('Todos/Index page', () => {
-  it('renders greeting and empty state without crashing', () => {
+describe("Todos/Index page", () => {
+  it("renders greeting and empty state without crashing", () => {
     render(
       <TodosIndex
-        user={{ name: 'Alice' }}
+        user={{ name: "Alice" }}
         page_todos={{
           has_previous: false,
           has_next: false,
@@ -14,10 +14,10 @@ describe('Todos/Index page', () => {
           results: [],
         }}
         errors={{}}
-      />
-    )
+      />,
+    );
 
-    expect(screen.getByText(/Hi, Alice/)).toBeInTheDocument()
-    expect(screen.getByText('No todos yet')).toBeInTheDocument()
-  })
-})
+    expect(screen.getByText(/Hi, Alice/)).toBeInTheDocument();
+    expect(screen.getByText("No todos yet")).toBeInTheDocument();
+  });
+});
