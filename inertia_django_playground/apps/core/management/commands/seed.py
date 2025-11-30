@@ -6,7 +6,6 @@ from faker.proxy import Faker
 from inertia_django_playground.apps.core.models import CreditCard
 from inertia_django_playground.apps.core.models import Todo
 from inertia_django_playground.support.django_helpers import chunker
-from inertia_django_playground.urls import todos_patterns
 
 
 class Command(BaseCommand):

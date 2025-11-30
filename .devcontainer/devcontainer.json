@@ -1,0 +1,20 @@
+{
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "devcontainer",
+  "overrideCommand": true,
+  "onCreateCommand": {
+    "install_node_packages": "npm ci",
+    "install_claude_code": "curl -fsSL https://claude.ai/install.sh | bash",
+  },
+  "customizations": {
+    "jetbrains": {
+      "plugins": [
+        "com.github.copilot",
+        "org.jetbrains.junie",
+        "Pythonid",
+        "com.intellij.python.django",
+        "NodeJS"
+      ]
+    }
+  }
+}

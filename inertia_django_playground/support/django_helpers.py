@@ -83,7 +83,7 @@ def chunker(iterable, size):
 
     it = iter(iterable)
 
-    for i in range(0, len(iterable), size):
+    for _ in range(0, len(iterable), size):
         yield [k for k in islice(it, size)]
 
 

@@ -4,6 +4,13 @@ x-build: &dockerfile-dev-build
   dockerfile: Dockerfile.dev
 
 services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile.devcontainer
+    env_file: .env
+    volumes:
+      - .:/app
   remote-interpreter:
     build: *dockerfile-dev-build
     env_file: .env

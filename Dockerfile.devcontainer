@@ -1,0 +1,21 @@
+FROM nikolaik/python-nodejs:python3.14-nodejs20
+
+RUN apt update && apt install -y git && apt clean
+
+WORKDIR /app
+
+RUN pip install --upgrade pip && \
+    pip install poetry && \
+    poetry config virtualenvs.create false --local
+
+COPY poetry.lock pyproject.toml ./
+
+RUN poetry install --no-root
+
+COPY package*.json ./
+
+# The command `npm ci` is executed through `onCreateCommand` in devcontainer.json
+
+ENV PATH="/root/.local/bin:${PATH}"
+
+COPY . ./
