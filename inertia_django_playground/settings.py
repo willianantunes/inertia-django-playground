@@ -5,6 +5,7 @@ from pathlib import Path
 
 from inertia.settings import settings as inertia_settings
 
+from inertia_django_playground.support.django_helpers import getenv_or_raise_exception
 from inertia_django_playground.support.django_helpers import strtobool
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -141,8 +142,9 @@ DJANGO_VITE_ASSETS_PATH = BASE_DIR / "frontend" / "dist"
 STATICFILES_DIRS = [DJANGO_VITE_ASSETS_PATH]
 
 INERTIA_LAYOUT = "core/index.html"
-INERTIA_SSR_URL = inertia_settings.INERTIA_SSR_URL
-INERTIA_SSR_ENABLED = inertia_settings.INERTIA_SSR_ENABLED
+INERTIA_SSR_ENABLED = strtobool(os.getenv("INERTIA_SSR_ENABLED"))
+if INERTIA_SSR_ENABLED:
+    INERTIA_SSR_URL = getenv_or_raise_exception("INERTIA_SSR_URL")
 INERTIA_JSON_ENCODER = inertia_settings.INERTIA_JSON_ENCODER
 
 # Default primary key field type

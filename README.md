@@ -1,6 +1,6 @@
 # Inertia Django Playground
 
-This project demonstrates how to effectively integrate Django, Vite, React, Whitenoise, and Inertia.js. It serves as a practical example for developers looking to build a full-stack application using these technologies.
+This project demonstrates how to effectively integrate Django, Vite, React, Whitenoise, and Inertia.js. It includes SSR also. It serves as a practical example for developers looking to build a full-stack application using these technologies.
 
 Key features and examples include:
 
@@ -17,12 +17,20 @@ Admin panel:
 
 - http://localhost:8000/admin/
 
-### With Docker
+### Without SSR
 
 Execute the following command in the terminal:
 
 ```shell
 docker compose run --service-ports --rm app-production
+```
+
+### With SSR
+
+Execute the following command in the terminal:
+
+```shell
+docker compose run --service-ports --rm app-production-ssr
 ```
 
 ### Without Docker

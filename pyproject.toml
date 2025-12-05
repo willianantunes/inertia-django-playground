@@ -3,8 +3,8 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.14"
-django = "*"
-inertia-django = "*"
+django = "^5.2.9"
+inertia-django = { extras = ["ssr"], version = "*" }
 whitenoise = "*"
 gunicorn = "*"
 django-vite = "*"

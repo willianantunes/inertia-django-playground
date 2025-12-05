@@ -87,7 +87,9 @@ def chunker(iterable, size):
         yield [k for k in islice(it, size)]
 
 
-def strtobool(value: str) -> bool:
+def strtobool(value: str | None) -> bool:
+    if value is None:
+        return False
     value = value.lower()
     if value in ("y", "yes", "on", "1", "true", "t"):
         return True
@@ -95,7 +97,7 @@ def strtobool(value: str) -> bool:
 
 
 def eval_env_as_boolean(varname, standard_value) -> bool:
-    return bool(strtobool(os.getenv(varname, str(standard_value))))
+    return strtobool(os.getenv(varname, str(standard_value)))
 
 
 def getenv_or_raise_exception(varname: str) -> str:

@@ -13,5 +13,7 @@ COPY vite.config.ts jsconfig.json tsconfig.json tsconfig.app.json tsconfig.node.
 
 ENTRYPOINT [ "/bin/sh", "-c" ]
 
-CMD [ "npm run dev" ]
+RUN npm run build-ssr
+
+CMD [ "node frontend/dist/ssr.js" ]
 

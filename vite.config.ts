@@ -33,7 +33,6 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           main: join(INPUT_DIR, "/main.tsx"),
-          css: join(INPUT_DIR, "/styles/main.css"),
         },
       },
     },
