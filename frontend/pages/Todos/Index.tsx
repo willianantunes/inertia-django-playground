@@ -1,3 +1,4 @@
+import SEO from "@/components/SEO.tsx";
 import { Form, Link } from "@inertiajs/react";
 import {
   Box,
@@ -56,6 +57,10 @@ export default function TodosIndex({ user, page_todos, errors }: PageTodosIndexP
 
   return (
     <Box sx={{ width: "100%", maxWidth: 896, mx: "auto" }}>
+      <SEO
+        title="Django Inertia - Todos"
+        description="Manage your todos efficiently with this Django, Inertia.js, and React powered application."
+      />
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 3 }}>
         <Typography variant="h5" fontWeight={600}>
           Hi, {user?.name}

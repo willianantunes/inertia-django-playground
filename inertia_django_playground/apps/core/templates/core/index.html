@@ -7,11 +7,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="csrf-token" content="" />
         {% vite_hmr_client %}
-        
         {% vite_react_refresh %}
         {% vite_asset 'main.tsx' %}
-        
-        <title>Django Inertia</title>
+
+        {% block inertia_head %}{% endblock inertia_head %}
     </head>
     <body>
         {% block inertia %}{% endblock %}

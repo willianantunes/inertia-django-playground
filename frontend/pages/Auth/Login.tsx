@@ -1,5 +1,6 @@
+import SEO from "@/components/SEO.tsx";
 import { Form, Link, usePage } from "@inertiajs/react";
-import { Box, Button, Stack, TextField, Typography, Alert } from "@mui/material";
+import { Alert, Box, Button, Stack, TextField, Typography } from "@mui/material";
 
 interface Message {
   message: string;
@@ -17,6 +18,10 @@ export default function Login() {
 
   return (
     <Box sx={{ maxWidth: 480, width: "100%", mx: "auto" }}>
+      <SEO
+        title="Django Inertia - Login"
+        description="Sign in to your account to manage your todos with this Django, Inertia.js, and React powered application."
+      />
       <Typography variant="h5" fontWeight={600} align="center" gutterBottom>
         Sign in
       </Typography>

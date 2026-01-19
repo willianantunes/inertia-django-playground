@@ -1,3 +1,4 @@
+import SEO from "@/components/SEO.tsx";
 import { Form, Link } from "@inertiajs/react";
 import {
   Box,
@@ -60,6 +61,10 @@ export default function CreditCardsIndex({ user, page_cards, errors }: PageCredi
 
   return (
     <Box sx={{ width: "100%", maxWidth: 1120, mx: "auto" }}>
+      <SEO
+        title="Django Inertia - Credit cards"
+        description="Manage your credit cards efficiently with this Django, Inertia.js, and React powered application."
+      />
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 3 }}>
         <Typography variant="h5" fontWeight={600}>
           Credit cards - {user?.name}

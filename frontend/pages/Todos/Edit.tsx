@@ -1,3 +1,4 @@
+import SEO from "@/components/SEO.tsx";
 import { Form, Link } from "@inertiajs/react";
 import { Box, Button, Checkbox, FormControlLabel, Stack, TextField, Typography } from "@mui/material";
 
@@ -15,6 +16,7 @@ interface PageTodosEditProps {
 export default function TodosEdit({ todo }: PageTodosEditProps) {
   return (
     <Box sx={{ width: "100%", maxWidth: 640, mx: "auto" }}>
+      <SEO title="Django Inertia - Edit Todo" description="Edit your todo item in the Django Inertia Todo app." />
       <Box sx={{ mb: 2 }}>
         <Button component={Link} href="/todos/" size="small">
           ← Back

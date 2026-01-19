@@ -1,3 +1,4 @@
+import SEO from "@/components/SEO.tsx";
 import { Link } from "@inertiajs/react";
 import { Box, Button, Container, Grid, List, ListItem, ListItemText, Paper, Stack, Typography } from "@mui/material";
 
@@ -8,6 +9,12 @@ interface PageIndexProps {
 export default function Index({ authenticated }: PageIndexProps) {
   return (
     <Box>
+      <SEO
+        title="Django Inertia - Home"
+        description="A classic Todo app built with Django, Inertia.js, and React."
+        keywords={["Django", "Inertia.js", "React", "Todo", "MUI", "Productivity"]}
+        author="Willian Antunes"
+      />
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Stack spacing={6}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
